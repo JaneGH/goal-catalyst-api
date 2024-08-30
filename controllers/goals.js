@@ -63,13 +63,13 @@ const updateGoal = async (req, res) => {
 
 const deleteGoal = async (req, res) => {
     const {
-        user: { userId },
+      //  user: { userId },
         params: { id: goalId },
       } = req
     
-      const goal = await Goal.findByIdAndRemove({
+      const goal = await Goal.findOneAndDelete({
         _id: goalId,
-        createdBy: userId,
+   //     createdBy: userId,
       })
       if (!goal) {
         throw new NotFoundError(`No goal with id ${goalId}`)
