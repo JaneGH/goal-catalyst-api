@@ -65,10 +65,25 @@ const updateGoal = async (req, res) => {
         user: { userId },
         params: { id: goalId },
       } = req
+
+      const { assignedToEmail } = req.body;
     
       if (company === '' || position === '') {
         throw new BadRequestError('Company or Position fields cannot be empty')
       }
+
+      if (assignedToEmail) {
+        const assignedUser = await User.findOne({ email: assignedToEmail });
+    
+        if (!assignedUser) {
+           return res.status(StatusCodes.NOT_FOUND).json({ error: 'User with assigned email not found' });
+       }
+ 
+       // Assign the user ID to assignedTo
+       req.body.assignedTo = assignedUser._id;
+ 
+     }
+
       const goal = await Goal.findByIdAndUpdate(
         { _id: goalId, createdBy: userId },
         req.body,
