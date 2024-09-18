@@ -1,4 +1,5 @@
 const Goal = require('../models/Goal')
+const User = require('../models/User')
 const { StatusCodes } = require('http-status-codes')
 
 const { BadRequestError, NotFoundError } = require('../errors')
@@ -33,8 +34,21 @@ const getGoal = async (req, res) => {
 const createGoal = async (req, res) => {
     req.body.createdBy = req.user.userId
     console.log(`Body: ${JSON.stringify(req.body)}...`)
-    // const goal = await Goal.create(req.body)
-    // res.status(StatusCodes.CREATED).json({ goal })
+    
+    const { assignedToEmail } = req.body;
+
+    if (assignedToEmail) {
+       const assignedUser = await User.findOne({ email: assignedToEmail });
+   
+       if (!assignedUser) {
+          return res.status(StatusCodes.NOT_FOUND).json({ error: 'User with assigned email not found' });
+      }
+
+      // Assign the user ID to assignedTo
+      req.body.assignedTo = assignedUser._id;
+
+    }
+
     try {
         const goal = await Goal.create(req.body);
         res.status(StatusCodes.CREATED).json({ goal });
