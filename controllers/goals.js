@@ -8,6 +8,11 @@ const getAllGoals = async (req, res) => {
     res.status(StatusCodes.OK).json({ goals, count: goals.length })
 }
 
+const getAllAssignedGoals = async (req, res) => {
+  const goals = await Goal.find({ assignedTo: req.user.userId }).sort('createdAt')
+  res.status(StatusCodes.OK).json({ goals, count: goals.length })
+}
+
 const getGoal = async (req, res) => {
     const {
         user: { userId },
@@ -80,6 +85,7 @@ const deleteGoal = async (req, res) => {
 
 module.exports = {
     getAllGoals,
+    getAllAssignedGoals,
     getGoal,
     createGoal,
     updateGoal,

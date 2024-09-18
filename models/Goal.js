@@ -32,6 +32,12 @@ const GoalSchema = new mongoose.Schema(
         default: 'Not Started',
       },
 
+      assignedTo: {
+        type: mongoose.Types.ObjectId,
+        ref: 'User',
+        default: null, 
+      },
+
    createdBy: {
       type: mongoose.Types.ObjectId,
       ref: 'User',
