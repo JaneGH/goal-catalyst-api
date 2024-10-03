@@ -5,21 +5,36 @@ const { StatusCodes } = require('http-status-codes')
 const { BadRequestError, NotFoundError } = require('../errors')
 
 const getAllGoals = async (req, res) => {
-  const { status, sort } = req.query; 
+  const { status, sort, search } = req.query;
 
-  const query = { createdBy: req.user.userId }; 
-  
-  if (status) {
-      query.status = status; 
+  const query = { createdBy: req.user.userId };
+
+  if (status && status !== 'all') {
+      query.status = status;
+  }
+
+  if (search) {
+      query.title = { $regex: search, $options: 'i' }; 
   }
 
   try {
-      const goals = await Goal.find(query).sort(sort || 'createdAt');
+      let sortOptions = {};
+      if (sort) {
+          if (sort === 'z-a') {
+              sortOptions.title = -1; 
+          } else if (sort === 'a-z') {
+              sortOptions.title = 1; 
+          }
+      } else {
+          sortOptions.createdAt = 1; 
+      }
+
+      const goals = await Goal.find(query).sort(sortOptions);
       res.status(StatusCodes.OK).json({ goals, count: goals.length });
   } catch (error) {
       res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
   }
-}
+};
 
 const getAllAssignedGoals = async (req, res) => {
   const goals = await Goal.find({ assignedTo: req.user.userId }).sort('createdAt')
