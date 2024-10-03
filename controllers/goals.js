@@ -20,14 +20,18 @@ const getAllGoals = async (req, res) => {
   try {
       let sortOptions = {};
       if (sort) {
-          if (sort === 'z-a') {
-              sortOptions.title = -1; 
-          } else if (sort === 'a-z') {
-              sortOptions.title = 1; 
-          }
+        if (sort === 'z-a') {
+            sortOptions.title = -1; 
+        } else if (sort === 'a-z') {
+            sortOptions.title = 1; 
+        } else if (sort === 'latest') {
+            sortOptions.createdAt = -1; 
+        } else if (sort === 'oldest') {
+            sortOptions.createdAt = 1; 
+        }
       } else {
-          sortOptions.createdAt = 1; 
-      }
+        sortOptions.createdAt = 1; // Default sort order (ascending by createdAt)
+      } 
 
       const goals = await Goal.find(query).sort(sortOptions);
       res.status(StatusCodes.OK).json({ goals, count: goals.length });
