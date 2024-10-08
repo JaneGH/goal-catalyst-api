@@ -20,7 +20,7 @@ const getAllGoals = async (req, res) => {
       };
     } else if (goalType === 'for friends') {
       query = {
-        assignedTo: { $ne: req.user.userId },
+        assignedTo: { $ne: req.user.userId, $exists: true, $ne: null }, 
         createdBy: req.user.userId,
       };
     } else if (goalType === 'all') {
