@@ -5,7 +5,7 @@ const { StatusCodes } = require('http-status-codes')
 const { BadRequestError, NotFoundError } = require('../errors')
 
 const getAllGoals = async (req, res) => {
-  const { status, sort, search } = req.query;
+  const { status, sort, search, goalType } = req.query;
 
   const query = {};
 
