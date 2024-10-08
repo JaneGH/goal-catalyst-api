@@ -7,7 +7,43 @@ const { BadRequestError, NotFoundError } = require('../errors')
 const getAllGoals = async (req, res) => {
   const { status, sort, search } = req.query;
 
-  const query = { createdBy: req.user.userId };
+  const query = {};
+
+
+  if (goalType) {
+    if (goalType === 'my') {
+      query = {
+        $and: [
+          { createdBy: req.user.userId },
+          { assignedTo: { $exists: false } } 
+        ]
+      };
+    } else if (goalType === 'assigned to me') {
+      query = {
+        $and: [
+          { createdBy:  { $ne: req.user.userId } },
+          { assignedTo: req.user.userId } 
+        ]
+      };
+    } else if (goalType === 'for friends') {
+      query.assignedTo = { $ne: req.user.userId }; 
+      query.createdBy = req.user.userId;
+    } else if (goalType === 'all') {
+      query = {
+        $or: [
+          { createdBy: req.user.userId },
+          { assignedTo: req.user.userId }
+        ]
+     }
+    }
+  }else{
+    query = {
+      $or: [
+        { createdBy: req.user.userId },
+        { assignedTo: req.user.userId }
+      ]
+   }
+ }
 
   if (status && status !== 'all') {
       query.status = status;
