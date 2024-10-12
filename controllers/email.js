@@ -5,10 +5,10 @@ const sendEmailController = async (req, res) => {
 
   try {
     const result = await sendEmail({
-      fromEmail: 'jkrytsyna@gmail.com',
-      toEmail: toEmail, // Use the email from the request
+      fromEmail: process.env.EMAIL,
+      toEmail: toEmail, 
       subject: 'GO',
-      textContent: textContent || "You have new task to do!", // Use provided textContent or a default message
+      textContent: textContent || "You have new task to do!",
     });
     res.status(200).json({ message: 'Email sent successfully', data: result });
   } catch (error) {
