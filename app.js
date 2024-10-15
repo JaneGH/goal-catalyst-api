@@ -8,7 +8,12 @@ const xss = require('xss-clean');
 const rateLimiter = require('express-rate-limit');
 
 const express = require('express');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swaggerOptions'); 
+
 const app = express();
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const connectDB = require('./db/connect');
 const authenticateUser = require('./middleware/authentication');
