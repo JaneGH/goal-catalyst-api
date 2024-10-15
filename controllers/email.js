@@ -5,8 +5,9 @@ const sendEmailController = async (req, res) => {
 
   try {
     const result = await sendEmail({
-      fromEmail: `"Goal catalyst" <${process.env.EMAIL}>`, 
+      fromEmail: process.env.EMAIL,
       toEmail: toEmail, 
+      name: "Goal catalyst",
       subject: 'GO',
       textContent: textContent || "You have new task to do!",
     });
