@@ -8,8 +8,8 @@ const sendEmailController = async (req, res) => {
       fromEmail: process.env.EMAIL,
       toEmail: toEmail, 
       fromName: 'Goal catalyst',
-      subject: 'GO',
-      textContent: textContent || "You have new task to do!",
+      subject: 'Step into Your Next Goal!',
+      textContent: textContent || "You’ve just set a new goal in the Goal Catalyst app! This is your chance to take on new challenges",
     });
     res.status(200).json({ message: 'Email sent successfully', data: result });
   } catch (error) {

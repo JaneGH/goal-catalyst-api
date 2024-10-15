@@ -1,6 +1,6 @@
 const mailjet = require('node-mailjet').apiConnect(process.env.MAILJET_API_KEY, process.env.MAILJET_API_SECRET);
 
-const sendEmail = async ({ fromEmail, toEmail, subject, textContent }) => {
+const sendEmail = async ({ fromEmail, fromName, toEmail, subject, textContent }) => {
   try {
     const request = mailjet
       .post('send', { version: 'v3.1' })
@@ -9,7 +9,7 @@ const sendEmail = async ({ fromEmail, toEmail, subject, textContent }) => {
           {
             From: {
               Email: fromEmail,
-              Name: 'Sender Name'  // Optionally, customize the sender's name
+              Name: fromName
             },
             To: [
               {
